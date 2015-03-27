@@ -12,6 +12,7 @@
 namespace Indigo\Hydra\Hydrator;
 
 use GeneratedHydrator\Configuration;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Wrapper using GeneratedHydrator created by Marco Pivetta (@Ocramius)
@@ -54,7 +55,7 @@ class GeneratedHydrator extends Base
      *
      * @param object $object
      *
-     * @return GeneratedHydrator
+     * @return HydratorInterface
      */
     private static function getHydrator($object)
     {
