@@ -21,7 +21,7 @@ install:
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --prefer-source --no-interaction
 
-script: vendor/bin/phpspec ${PHPSPEC_FLAGS}
+script: vendor/bin/phpspec run ${PHPSPEC_FLAGS}
 
 after_script:
   - if [[ "$COVERAGE" = true ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
