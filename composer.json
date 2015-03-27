@@ -17,9 +17,11 @@
         "phpspec/phpspec": "~2.1",
         "henrikbjorn/phpspec-code-coverage" : "~1.0",
         "athletic/athletic": "^0.1",
-        "zendframework/zend-stdlib": "~2.3"
+        "zendframework/zend-stdlib": "~2.3",
+        "ocramius/generated-hydrator": "~1.1"
     },
     "suggest": {
+        "zendframework/zend-stdlib": "Can be used with GeneratedHydrator hydrator",
         "zendframework/zend-stdlib": "Can be used with Zend hydrator"
     },
     "autoload": {

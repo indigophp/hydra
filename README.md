@@ -27,6 +27,7 @@ $ composer require indigophp/hydra
 
 Hydrators can be found under `Indigo\Hydra\Hydrator` namespace.
 
+- GeneratedHydrator: Uses [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator) created by **[@Ocramius](https://github.com/Ocramius)**
 - ObjectProperty: Maps data to, reads from public properties
 - Reflection: Uses reflection to access all object properties (non-static ones)
 - Zend: Allows to use hydrators from [zendframework/zend-stdlib](https://github.com/zendframework/Component_ZendStdlib) package
