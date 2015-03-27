@@ -1,13 +1,13 @@
 <?php
 
-namespace Indigo\Hydra\Benchmark;
+namespace Indigo\Hydra\Benchmark\ObjectProperty;
 
 use Athletic\AthleticEvent;
 use Indigo\Hydra\Hydrator\ObjectProperty as HydraObjectProperty;
 use Indigo\Hydra\Stub;
 use Zend\Stdlib\Hydrator\ObjectProperty as ZendObjectProperty;
 
-class ObjectPropertyBenchmark extends AthleticEvent
+class Extraction extends AthleticEvent
 {
     protected $hydraObjectProperty;
     protected $zendObjectProperty;
@@ -16,20 +16,6 @@ class ObjectPropertyBenchmark extends AthleticEvent
     protected $shortWithValues;
     protected $long;
     protected $longWithValues;
-
-    protected $shortData = [
-        'c' => 'c',
-    ];
-
-    protected $longData = [
-        'c' => 'value1',
-        'e' => 'value2',
-        'f' => 'value3',
-        'g' => 'value4',
-        'h' => 'value5',
-        'i' => 'value6',
-        'j' => 'value7',
-    ];
 
     public function classSetUp()
     {
@@ -50,7 +36,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function hydraShort()
     {
-        $this->hydraObjectProperty->hydrate($this->short, $this->shortData);
+        $this->hydraObjectProperty->extract($this->short);
     }
 
     /**
@@ -58,7 +44,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function hydraShortWithValues()
     {
-        $this->hydraObjectProperty->hydrate($this->shortWithValues, $this->shortData);
+        $this->hydraObjectProperty->extract($this->shortWithValues);
     }
 
     /**
@@ -66,7 +52,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function hydraLong()
     {
-        $this->hydraObjectProperty->hydrate($this->long, $this->longData);
+        $this->hydraObjectProperty->extract($this->long);
     }
 
     /**
@@ -74,7 +60,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function hydraLongWithValues()
     {
-        $this->hydraObjectProperty->hydrate($this->longWithValues, $this->longData);
+        $this->hydraObjectProperty->extract($this->longWithValues);
     }
 
     /**
@@ -82,7 +68,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function zendShort()
     {
-        $this->zendObjectProperty->hydrate($this->shortData, $this->short);
+        $this->zendObjectProperty->extract($this->short);
     }
 
     /**
@@ -90,7 +76,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function zendShortWithValues()
     {
-        $this->zendObjectProperty->hydrate($this->shortData, $this->shortWithValues);
+        $this->zendObjectProperty->extract($this->shortWithValues);
     }
 
     /**
@@ -98,7 +84,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function zendLong()
     {
-        $this->zendObjectProperty->hydrate($this->longData, $this->long);
+        $this->zendObjectProperty->extract($this->long);
     }
 
     /**
@@ -106,7 +92,7 @@ class ObjectPropertyBenchmark extends AthleticEvent
      */
     public function zendLongWithValues()
     {
-        $this->zendObjectProperty->hydrate($this->longData, $this->longWithValues);
+        $this->zendObjectProperty->extract($this->longWithValues);
     }
 }
 
