@@ -40,7 +40,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 - [Márk Sági-Kazár](https://github.com/sagikazarmark)
 - [All Contributors](https://github.com/indigophp/hydra/contributors)
 
-This library is heavily influenced by [Zend Stdlib](https://github.com/zendframework/Component_ZendStdlib), [Doctrine Hydration](https://github.com/doctrine/doctrine2/tree/master/lib/Doctrine/ORM/Internal/Hydration) and [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator) package created by @Ocramius.
+This library is heavily influenced by [Zend Stdlib](https://github.com/zendframework/Component_ZendStdlib), [Doctrine Hydration](https://github.com/doctrine/doctrine2/tree/master/lib/Doctrine/ORM/Internal/Hydration) and [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator) package created by **[@Ocramius](https://github.com/Ocramius)**.
 
 
 ## License
