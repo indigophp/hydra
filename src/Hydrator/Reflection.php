@@ -65,7 +65,7 @@ class Reflection extends Base
      */
     private static function getReflectionProperties($object)
     {
-        $properties = & static::$reflectionProperties[get_class($object)];
+        $properties = & self::$reflectionProperties[get_class($object)];
 
         if (!isset($properties)) {
             $reflection = new \ReflectionClass($object);
