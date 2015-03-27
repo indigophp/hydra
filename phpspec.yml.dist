@@ -1,0 +1,5 @@
+suites:
+  hydra_suite:
+    namespace: Indigo\Hydra
+    psr4_prefix: Indigo\Hydra
+formatter.name: pretty

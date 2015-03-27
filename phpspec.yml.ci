@@ -1,0 +1,10 @@
+suites:
+  hydra_suite:
+    namespace: Indigo\Hydra
+    psr4_prefix: Indigo\Hydra
+extensions:
+  - PhpSpec\Extension\CodeCoverageExtension
+formatter.name: pretty
+code_coverage:
+  format: clover
+  output: build/coverage.xml
