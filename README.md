@@ -23,6 +23,14 @@ $ composer require indigophp/hydra
 ## Usage
 
 
+### Currently supported hydrators
+
+Hydrators can be found under `Indigo\Hydra\Hydrator` namespace.
+
+- ObjectProperty: Maps data to, reads from public properties
+- Zend: Allows to use hydrators from [zendframework/zend-stdlib](https://github.com/zendframework/Component_ZendStdlib) package
+
+
 ## Testing
 
 ``` bash
