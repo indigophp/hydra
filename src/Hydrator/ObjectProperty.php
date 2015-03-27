@@ -41,7 +41,7 @@ class ObjectProperty extends Base
 
         $validData = array_intersect_key($data, $properties);
 
-        foreach ($data as $name => $value) {
+        foreach ($validData as $name => $value) {
             $object->$name = $value;
         }
     }
