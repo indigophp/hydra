@@ -70,11 +70,13 @@ class Reflection extends Base
         if (!isset($properties)) {
             $reflection = new \ReflectionClass($object);
 
-            // We only need object context properties???
-            $reflectionProperties = array_diff($reflection->getProperties(), $reflection->getProperties(\ReflectionProperty::IS_STATIC));
+            foreach ($reflection->getProperties() as $property) {
+                // We only need object context properties???
+                if ($property->isStatic()) {
+                    continue;
+                }
 
-            foreach ($reflectionProperties as $property) {
-                // Is it always necessary
+                // Is it always necessary?
                 $property->setAccessible(true);
                 $properties[$property->getName()] = $property;
             }
