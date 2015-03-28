@@ -32,9 +32,11 @@ class Reflection extends Base
 
         $properties = self::getReflectionProperties($object);
 
-        foreach ($data as $key => $value) {
-            if (isset($properties[$key])) {
-                $properties[$key]->setValue($object, $value);
+        foreach ($properties as $property) {
+            $name = $property->getName();
+
+            if (isset($data[$name])) {
+                $property->setValue($object, $data[$name]);
             }
         }
     }
@@ -49,8 +51,8 @@ class Reflection extends Base
         $data = [];
         $properties = self::getReflectionProperties($object);
 
-        foreach ($properties as $name => $property) {
-            $data[$name] = $property->getValue($object);
+        foreach ($properties as $property) {
+            $data[$property->getName()] = $property->getValue($object);
         }
 
         return $data;
@@ -69,17 +71,13 @@ class Reflection extends Base
 
         if (!isset(self::$reflectionProperties[$class])) {
             $reflection = new \ReflectionClass($object);
-            self::$reflectionProperties[$class] = [];
+            self::$reflectionProperties[$class] = array_filter($reflection->getProperties(), function($property) {
+                // Is it always necessary?
+                $property->setAccessible(true);
 
-            foreach ($reflection->getProperties() as $property) {
                 // We only need object context properties???
-                if (!$property->isStatic()) {
-                    // Is it always necessary?
-                    $property->setAccessible(true);
-
-                    self::$reflectionProperties[$class][$property->getName()] = $property;
-                }
-            }
+                return !$property->isStatic();
+            });
         }
 
         return self::$reflectionProperties[$class];
