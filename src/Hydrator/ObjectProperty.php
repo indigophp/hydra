@@ -29,9 +29,19 @@ class ObjectProperty extends Base
     private static $hydratorClosure;
 
     /**
+     * @var \Closure[]
+     */
+    private static $hydratorClosureCache;
+
+    /**
      * @var \Closure
      */
     private static $extractorClosure;
+
+    /**
+     * @var \Closure[]
+     */
+    private static $extractorClosureCache;
 
     /**
      * {@inheritdoc}
@@ -86,7 +96,13 @@ class ObjectProperty extends Base
             };
         }
 
-        return \Closure::bind(self::$hydratorClosure, null, get_class($object));
+        $class = get_class($object);
+
+        if (!isset(self::$hydratorClosureCache[$class])) {
+            self::$hydratorClosureCache[$class] = \Closure::bind(self::$hydratorClosure, null, $class);
+        }
+
+        return self::$hydratorClosureCache[$class];
     }
 
     /**
@@ -104,6 +120,12 @@ class ObjectProperty extends Base
             };
         }
 
-        return \Closure::bind(self::$extractorClosure, null, get_class($object));
+        $class = get_class($object);
+
+        if (!isset(self::$extractorClosureCache[$class])) {
+            self::$extractorClosureCache[$class] = \Closure::bind(self::$extractorClosure, null, $class);
+        }
+
+        return self::$extractorClosureCache[$class];
     }
 }
