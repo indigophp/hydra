@@ -87,18 +87,8 @@ class Generator
         // Remove unused methods
         $traverser->addVisitor(new MethodDisablerVisitor(function() { return false; }));
 
-        $accessibleProperties = $this->getProperties(
-            $originalClass,
-            \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED
-        );
-
-        $propertyWriters = $this->getPropertyWriters($originalClass);
-
         // Implement new methods and interfaces, extend original class
-        $traverser->addVisitor(new Visitor\ConstructorMethod($accessibleProperties, $propertyWriters));
-        $traverser->addVisitor(new Visitor\HydrateMethod($accessibleProperties, $propertyWriters));
-        $traverser->addVisitor(new Visitor\ExtractMethod($accessibleProperties, $propertyWriters));
-
+        $this->addMethodVisitors($originalClass, $traverser);
         $traverser->addVisitor(new ClassExtensionVisitor($realClass, $realClass));
         $traverser->addVisitor(new ClassImplementorVisitor($realClass, ['Indigo\\Hydra\\Hydrator']));
 
@@ -106,6 +96,26 @@ class Generator
         $traverser->addVisitor(new ClassRenamerVisitor($originalClass, $hydratorClass));
 
         return $traverser->traverse($ast);
+    }
+
+    /**
+     * Adds method visitors
+     *
+     * @param \ReflectionClass $originalClass
+     * @param NodeTraverser    $traverser
+     */
+    protected function addMethodVisitors(\ReflectionClass $originalClass, NodeTraverser $traverser)
+    {
+        $accessibleProperties = $this->getProperties(
+            $originalClass,
+            \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED
+        );
+
+        $propertyWriters = $this->getPropertyWriters($originalClass);
+
+        $traverser->addVisitor(new Visitor\ConstructorMethod($accessibleProperties, $propertyWriters));
+        $traverser->addVisitor(new Visitor\HydrateMethod($accessibleProperties, $propertyWriters));
+        $traverser->addVisitor(new Visitor\ExtractMethod($accessibleProperties, $propertyWriters));
     }
 
     /**
