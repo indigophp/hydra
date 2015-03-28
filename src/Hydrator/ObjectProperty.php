@@ -24,6 +24,16 @@ class ObjectProperty extends Base
     private static $publicPropertiesCache = [];
 
     /**
+     * @var \Closure
+     */
+    private static $hydratorClosure;
+
+    /**
+     * @var \Closure
+     */
+    private static $extractorClosure;
+
+    /**
      * {@inheritdoc}
      */
     public function hydrate($object, array $data)
@@ -34,16 +44,17 @@ class ObjectProperty extends Base
 
         // Reflection is slow, we use get_object_vars to get the names as well
         if (!isset($properties)) {
-            $objectProperties = get_object_vars($object);
+            $extractorClosure = self::getExtractorClosure($object);
+            $objectProperties = $extractorClosure($object);
 
             $properties = array_fill_keys(array_keys($objectProperties), true);
         }
 
         $validData = array_intersect_key($data, $properties);
 
-        foreach ($validData as $name => $value) {
-            $object->$name = $value;
-        }
+        $hydratorClosure = self::getHydratorClosure($object);
+
+        $hydratorClosure($object, $validData);
     }
 
     /**
@@ -53,6 +64,46 @@ class ObjectProperty extends Base
     {
         $this->ensureObject($object);
 
-        return get_object_vars($object);
+        $extractorClosure = self::getExtractorClosure($object);
+
+        return $extractorClosure($object);
+    }
+
+    /**
+     * Returns a closure for hydration
+     *
+     * @param object $object
+     *
+     * @return \Closure
+     */
+    private static function getHydratorClosure($object)
+    {
+        if (!isset(self::$hydratorClosure)) {
+            self::$hydratorClosure = function($object, array $data) {
+                foreach ($data as $name => $value) {
+                    $object->$name = $value;
+                }
+            };
+        }
+
+        return \Closure::bind(self::$hydratorClosure, null, get_class($object));
+    }
+
+    /**
+     * Returns a closure for extraction
+     *
+     * @param object $object
+     *
+     * @return \Closure
+     */
+    private static function getExtractorClosure($object)
+    {
+        if (!isset(self::$extractorClosure)) {
+            self::$extractorClosure = function($object) {
+                return get_object_vars($object);
+            };
+        }
+
+        return \Closure::bind(self::$extractorClosure, null, get_class($object));
     }
 }

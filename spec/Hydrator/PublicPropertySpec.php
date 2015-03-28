@@ -6,11 +6,11 @@ use Indigo\Hydra\Stub\ShortExample;
 use Indigo\Hydra\Stub\ShortExampleWithValues;
 use PhpSpec\ObjectBehavior;
 
-class ObjectPropertySpec extends ObjectBehavior
+class PublicPropertySpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('Indigo\Hydra\Hydrator\ObjectProperty');
+        $this->shouldHaveType('Indigo\Hydra\Hydrator\PublicProperty');
         $this->shouldHaveType('Indigo\Hydra\Hydrator\Base');
         $this->shouldImplement('Indigo\Hydra\Hydrator');
     }
@@ -32,10 +32,6 @@ class ObjectPropertySpec extends ObjectBehavior
     {
         $object = new ShortExampleWithValues;
 
-        $this->extract($object)->shouldReturn([
-            'a' => 'a',
-            'b' => null,
-            'c' => 1,
-        ]);
+        $this->extract($object)->shouldReturn(['c' => 1]);
     }
 }

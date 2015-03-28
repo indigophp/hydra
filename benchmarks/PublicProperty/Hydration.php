@@ -1,10 +1,10 @@
 <?php
 
-namespace Indigo\Hydra\Benchmark\ObjectProperty;
+namespace Indigo\Hydra\Benchmark\PublicProperty;
 
 use Athletic\AthleticEvent;
 use Indigo\Hydra\Benchmark\Hydration as ParentBenchmark;
-use Indigo\Hydra\Hydrator\ObjectProperty as HydraObjectProperty;
+use Indigo\Hydra\Hydrator\PublicProperty;
 use Zend\Stdlib\Hydrator\ObjectProperty as ZendObjectProperty;
 
 class Hydration extends AthleticEvent
@@ -27,7 +27,7 @@ class Hydration extends AthleticEvent
 
     public function classSetUp()
     {
-        $this->hydra = new HydraObjectProperty;
+        $this->hydra = new PublicProperty;
         $this->zend = new ZendObjectProperty;
     }
 }
