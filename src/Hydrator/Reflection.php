@@ -65,24 +65,25 @@ class Reflection extends Base
      */
     private static function getReflectionProperties($object)
     {
-        $properties = & self::$reflectionProperties[get_class($object)];
+        $class = get_class($object);
 
-        if (!isset($properties)) {
+        if (!isset(self::$reflectionProperties[$class])) {
             $reflection = new \ReflectionClass($object);
             $properties = [];
 
             foreach ($reflection->getProperties() as $property) {
                 // We only need object context properties???
-                if ($property->isStatic()) {
-                    continue;
-                }
+                if (!$property->isStatic()) {
+                    // Is it always necessary?
+                    $property->setAccessible(true);
 
-                // Is it always necessary?
-                $property->setAccessible(true);
-                $properties[$property->getName()] = $property;
+                    $properties[$property->getName()] = $property;
+                }
             }
+
+            self::$reflectionProperties[$class] = $properties;
         }
 
-        return $properties;
+        return self::$reflectionProperties[$class];
     }
 }
