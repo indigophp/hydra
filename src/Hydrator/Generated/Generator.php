@@ -71,7 +71,7 @@ class Generator
     /**
      * Generates an AST out of a given reflection class and a target hydrator name
      *
-     * @param string $originalClass
+     * @param string $realClass
      * @param string $hydratorClass
      *
      * @return \PhpParser\Node[]

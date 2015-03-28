@@ -195,8 +195,8 @@ PART;
     /**
      * Builds an extract property
      *
-     * @param string $template
-     * @param array  $arguments
+     * @param string   $template
+     * @param string[] $arguments
      *
      * @return string
      */
