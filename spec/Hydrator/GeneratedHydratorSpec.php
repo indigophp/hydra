@@ -4,6 +4,7 @@ namespace spec\Indigo\Hydra\Hydrator;
 
 use Indigo\Hydra\Stub\ShortExample;
 use Indigo\Hydra\Stub\ShortExampleWithValues;
+use Indigo\Hydra\Stub\ZeroExample;
 use PhpSpec\ObjectBehavior;
 
 class GeneratedHydratorSpec extends ObjectBehavior
@@ -41,5 +42,12 @@ class GeneratedHydratorSpec extends ObjectBehavior
             'c' => 1,
             'a' => 'a',
         ]);
+    }
+
+    function it_extracts_values_from_an_empty_object()
+    {
+        $object = new ZeroExample;
+
+        $this->extract($object)->shouldReturn([]);
     }
 }

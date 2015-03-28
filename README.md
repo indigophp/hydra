@@ -27,6 +27,7 @@ $ composer require indigophp/hydra
 
 Hydrators can be found under `Indigo\Hydra\Hydrator` namespace.
 
+- Generated: Inspired by **GeneratedHydrator**. Contains some custom logic, but generation logic is heavily based on the original code
 - GeneratedHydrator: Uses [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator) created by **[@Ocramius](https://github.com/Ocramius)**
 - HydratableAware: It is a decorator which checks if the object implements `Indigo\Hydra\Hydratable` interface and falls back to the hydrator if not
 - ObjectProperty: Maps data to, reads from public properties
@@ -49,6 +50,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Credits
 
 - [Márk Sági-Kazár](https://github.com/sagikazarmark)
+- [Marco Pivetta](https://github.com/Ocramius)
 - [All Contributors](https://github.com/indigophp/hydra/contributors)
 
 This library is heavily influenced by [Zend Stdlib](https://github.com/zendframework/Component_ZendStdlib), [Doctrine Hydration](https://github.com/doctrine/doctrine2/tree/master/lib/Doctrine/ORM/Internal/Hydration) and [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator) package created by **[@Ocramius](https://github.com/Ocramius)**.

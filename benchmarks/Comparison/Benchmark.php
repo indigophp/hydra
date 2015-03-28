@@ -7,6 +7,7 @@ use Indigo\Hydra\Stub;
 
 trait Benchmark
 {
+    protected $generated;
     protected $generatedHydrator;
     protected $objectProperty;
     protected $reflection;
@@ -18,6 +19,7 @@ trait Benchmark
 
     public function classSetUp()
     {
+        $this->generated = new Hydrator\Generated;
         $this->generatedHydrator = new Hydrator\GeneratedHydrator;
         $this->objectProperty = new Hydrator\ObjectProperty;
         $this->reflection = new Hydrator\Reflection;

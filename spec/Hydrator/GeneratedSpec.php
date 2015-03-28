@@ -7,11 +7,11 @@ use Indigo\Hydra\Stub\ShortExampleWithValues;
 use Indigo\Hydra\Stub\ZeroExample;
 use PhpSpec\ObjectBehavior;
 
-class PublicPropertySpec extends ObjectBehavior
+class GeneratedSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('Indigo\Hydra\Hydrator\PublicProperty');
+        $this->shouldHaveType('Indigo\Hydra\Hydrator\Generated');
         $this->shouldHaveType('Indigo\Hydra\Hydrator\Base');
         $this->shouldImplement('Indigo\Hydra\Hydrator');
     }
@@ -19,7 +19,11 @@ class PublicPropertySpec extends ObjectBehavior
     function it_hydrates_an_object_with_provided_data()
     {
         $object = new ShortExample;
-        $data = ['c' => 'c'];
+        $data = [
+            'a' => 'a',
+            'b' => 'b',
+            'c' => 'c'
+        ];
 
         $this->hydrate($object, $data);
     }
@@ -33,7 +37,11 @@ class PublicPropertySpec extends ObjectBehavior
     {
         $object = new ShortExampleWithValues;
 
-        $this->extract($object)->shouldReturn(['c' => 1]);
+        $this->extract($object)->shouldReturn([
+            'b' => null,
+            'c' => 1,
+            'a' => 'a',
+        ]);
     }
 
     function it_extracts_values_from_an_empty_object()

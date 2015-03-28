@@ -29,6 +29,38 @@ class Hydration extends AthleticEvent
     /**
      * @iterations 1000
      */
+    public function generatedShort()
+    {
+        $this->generated->hydrate($this->short, $this->shortData);
+    }
+
+    /**
+     * @iterations 1000
+     */
+    public function generatedShortWithValues()
+    {
+        $this->generated->hydrate($this->shortWithValues, $this->shortData);
+    }
+
+    /**
+     * @iterations 1000
+     */
+    public function generatedLong()
+    {
+        $this->generated->hydrate($this->long, $this->longData);
+    }
+
+    /**
+     * @iterations 1000
+     */
+    public function generatedLongWithValues()
+    {
+        $this->generated->hydrate($this->longWithValues, $this->longData);
+    }
+
+    /**
+     * @iterations 1000
+     */
     public function generatedHydratorShort()
     {
         $this->generatedHydrator->hydrate($this->short, $this->shortData);

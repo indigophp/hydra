@@ -11,6 +11,38 @@ class Extraction extends AthleticEvent
     /**
      * @iterations 1000
      */
+    public function generatedShort()
+    {
+        $this->generated->extract($this->short);
+    }
+
+    /**
+     * @iterations 1000
+     */
+    public function generatedShortWithValues()
+    {
+        $this->generated->extract($this->shortWithValues);
+    }
+
+    /**
+     * @iterations 1000
+     */
+    public function generatedLong()
+    {
+        $this->generated->extract($this->long);
+    }
+
+    /**
+     * @iterations 1000
+     */
+    public function generatedLongWithValues()
+    {
+        $this->generated->extract($this->longWithValues);
+    }
+
+    /**
+     * @iterations 1000
+     */
     public function generatedHydratorShort()
     {
         $this->generatedHydrator->extract($this->short);

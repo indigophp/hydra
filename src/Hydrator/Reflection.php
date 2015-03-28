@@ -69,6 +69,7 @@ class Reflection extends Base
 
         if (!isset($properties)) {
             $reflection = new \ReflectionClass($object);
+            $properties = [];
 
             foreach ($reflection->getProperties() as $property) {
                 // We only need object context properties???
