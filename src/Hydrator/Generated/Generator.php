@@ -45,9 +45,9 @@ class Generator
     }
 
     /**
-     * Returns a hydrator class for an object or a class name
+     * Returns a hydrator class for a class name
      *
-     * @param string $object
+     * @param string $class
      *
      * @return string
      */
@@ -59,9 +59,7 @@ class Generator
         $hydratorClass = $inflector->getGeneratedClassName($realClass, ['generator' => get_class($this)]);
 
         if (!class_exists($hydratorClass)) {
-            $originalClass = new \ReflectionClass($realClass);
-
-            $ast = $this->generateAst($originalClass, $hydratorClass);
+            $ast = $this->generateAst($realClass, $hydratorClass);
 
             $this->configuration->getGeneratorStrategy()->generate($ast);
             $this->configuration->getAutoloader()->__invoke($hydratorClass);
@@ -73,33 +71,31 @@ class Generator
     /**
      * Generates an AST out of a given reflection class and a target hydrator name
      *
-     * @param \ReflectionClass $originalClass
-     * @param string           $hydratorClass
+     * @param string $originalClass
+     * @param string $hydratorClass
      *
      * @return \PhpParser\Node[]
      */
-    protected function generateAst(\ReflectionClass $originalClass, $hydratorClass)
+    protected function generateAst($realClass, $hydratorClass)
     {
+        $originalClass = new \ReflectionClass($realClass);
         $builder = new ClassBuilder;
+        $traverser = new NodeTraverser;
 
         $ast = $builder->fromReflection($originalClass);
 
         // Remove unused methods
-        $cleaner = new NodeTraverser;
-        $cleaner->addVisitor(new MethodDisablerVisitor(function() { return false; }));
-        $ast = $cleaner->traverse($ast);
+        $traverser->addVisitor(new MethodDisablerVisitor(function() { return false; }));
+        // $ast = $cleaer->traverse($ast);
 
         // Implement new methods and interfaces, extend original class
-        $implementor = new NodeTraverser;
-        $implementor->addVisitor(new HydratorMethodsVisitor($originalClass));
-        $implementor->addVisitor(new ClassExtensionVisitor($originalClass->getName(), $originalClass->getName()));
-        $implementor->addVisitor(new ClassImplementorVisitor($originalClass->getName(), ['Indigo\\Hydra\\Hydrator']));
-        $ast = $implementor->traverse($ast);
+        $traverser->addVisitor(new HydratorMethodsVisitor($originalClass));
+        $traverser->addVisitor(new ClassExtensionVisitor($realClass, $realClass));
+        $traverser->addVisitor(new ClassImplementorVisitor($realClass, ['Indigo\\Hydra\\Hydrator']));
 
-        $renamer = new NodeTraverser;
-        $renamer->addVisitor(new ClassRenamerVisitor($originalClass, $hydratorClass));
-        $ast = $renamer->traverse($ast);
+        // Renames class
+        $traverser->addVisitor(new ClassRenamerVisitor($originalClass, $hydratorClass));
 
-        return $ast;
+        return $traverser->traverse($ast);
     }
 }
