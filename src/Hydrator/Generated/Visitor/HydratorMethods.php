@@ -65,20 +65,7 @@ abstract class HydratorMethods extends NodeVisitorAbstract
             return null;
         }
 
-        $name = $this->getMethodName();
-
-        $foundMethods = array_filter(
-            $node->getMethods(),
-            function (ClassMethod $method) use ($name) {
-                return $name === $method->name;
-            }
-        );
-
-        $method = reset($foundMethods);
-
-        if (!$method) {
-            $node->stmts[] = $method = new ClassMethod($name);
-        }
+        $method = $this->findOrCreateMethod($node, $this->getName);
 
         $this->replaceMethod($method);
 
@@ -94,4 +81,30 @@ abstract class HydratorMethods extends NodeVisitorAbstract
      * @return string
      */
     abstract protected function getMethodName();
+
+    /**
+     * Finds or creates a class method (and eventually attaches it to the class itself)
+     *
+     * @param Class_ $class
+     * @param string $name
+     *
+     * @return ClassMethod
+     */
+    protected function findOrCreateMethod(Class_ $class, $name)
+    {
+        $foundMethods = array_filter(
+            $class->getMethods(),
+            function (ClassMethod $method) use ($name) {
+                return $name === $method->name;
+            }
+        );
+
+        $method = reset($foundMethods);
+
+        if (!$method) {
+            $class->stmts[] = $method = new ClassMethod($name);
+        }
+
+        return $method;
+    }
 }
