@@ -214,18 +214,15 @@ PART;
     {
         $body = '';
 
-        foreach ($this->propertyWriters as $propertyWriter) {
-            $property = $propertyWriter->getOriginalProperty();
-            $propertyName = $property->getName();
+        foreach ($this->accessibleProperties as $accessibleProperty) {
+            $propertyName = $accessibleProperty->getName();
+            $exportedPropertyName = var_export($propertyName, true);
 
-            $body .= $this->buildExtractProperty(
-                '%s => $data["\\0%s\\0%s"],',
-                [
-                    var_export($propertyName, true),
-                    $property->getDeclaringClass()->getName(),
-                    $propertyName,
-                ]
-            );
+            if (empty($this->propertyWriters) || ! $accessibleProperty->isProtected()) {
+                $body .= $this->buildExtractProperty('%s => $object->%s,', [$exportedPropertyName, $propertyName]);
+            } else {
+                $body .= $this->buildExtractProperty('%s => $data["\\0*\\0%s"],', [$exportedPropertyName, $propertyName]);
+            }
         }
 
         return $body;
@@ -240,15 +237,18 @@ PART;
     {
         $body = '';
 
-        foreach ($this->accessibleProperties as $accessibleProperty) {
-            $propertyName = $accessibleProperty->getName();
-            $exportedPropertyName = var_export($propertyName, true);
+        foreach ($this->propertyWriters as $propertyWriter) {
+            $property = $propertyWriter->getOriginalProperty();
+            $propertyName = $property->getName();
 
-            if (empty($this->propertyWriters) || ! $accessibleProperty->isProtected()) {
-                $body .= $this->buildExtractProperty('%s => $object->%s,', [$exportedPropertyName, $propertyName]);
-            } else {
-                $body .= $this->buildExtractProperty('%s => $data["\\0*\\0%s"],', [$exportedPropertyName, $propertyName]);
-            }
+            $body .= $this->buildExtractProperty(
+                '%s => $data["\\0%s\\0%s"],',
+                [
+                    var_export($propertyName, true),
+                    $property->getDeclaringClass()->getName(),
+                    $propertyName,
+                ]
+            );
         }
 
         return $body;
