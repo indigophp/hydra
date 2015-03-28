@@ -36,15 +36,11 @@ class ExtractMethod extends HydratorMethods
     {
         $method->params = [new Param('object')];
 
-        // if no properties to hydrate
-        $body = 'return [];';
-
-        if (!empty($this->accessibleProperties) || !empty($this->propertyWriters)) {
-            $body = '';
-
-            if (!empty($this->propertyWriters)) {
-                $body = "\$data = (array) \$object;\n\n";
-            }
+        if (empty($this->accessibleProperties) && empty($this->propertyWriters)) {
+            // if no properties to hydrate
+            $body = 'return [];';
+        } else {
+            $body = $this->initialBody();
 
             $body .= sprintf(
                 "return [\n%s%s];",
@@ -55,6 +51,20 @@ class ExtractMethod extends HydratorMethods
 
 
         $method->stmts = $this->parser->parse('<?php ' . $body);
+    }
+
+    /**
+     * Builds the initial body
+     *
+     * @return string
+     */
+    protected function initialBody()
+    {
+        if (!empty($this->propertyWriters)) {
+            return "\$data = (array) \$object;\n\n";
+        }
+
+        return '';
     }
 
     /**
