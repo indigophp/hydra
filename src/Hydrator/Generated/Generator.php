@@ -86,10 +86,19 @@ class Generator
 
         // Remove unused methods
         $traverser->addVisitor(new MethodDisablerVisitor(function() { return false; }));
-        // $ast = $cleaer->traverse($ast);
+
+        $accessibleProperties = $this->getProperties(
+            $originalClass,
+            \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED
+        );
+
+        $propertyWriters = $this->getPropertyWriters($originalClass);
 
         // Implement new methods and interfaces, extend original class
-        $traverser->addVisitor(new HydratorMethodsVisitor($originalClass));
+        $traverser->addVisitor(new Visitor\ConstructorMethod($accessibleProperties, $propertyWriters));
+        $traverser->addVisitor(new Visitor\HydrateMethod($accessibleProperties, $propertyWriters));
+        $traverser->addVisitor(new Visitor\ExtractMethod($accessibleProperties, $propertyWriters));
+
         $traverser->addVisitor(new ClassExtensionVisitor($realClass, $realClass));
         $traverser->addVisitor(new ClassImplementorVisitor($realClass, ['Indigo\\Hydra\\Hydrator']));
 
@@ -97,5 +106,41 @@ class Generator
         $traverser->addVisitor(new ClassRenamerVisitor($originalClass, $hydratorClass));
 
         return $traverser->traverse($ast);
+    }
+
+    /**
+     * Retrieves instance public/protected properties
+     *
+     * @param \ReflectionClass $originalClass
+     * @param integer          $filter
+     *
+     * @return \ReflectionProperty[]
+     */
+    protected function getProperties(\ReflectionClass $originalClass, $filter = null)
+    {
+        return array_filter(
+            $originalClass->getProperties($filter),
+            function (\ReflectionProperty $property) {
+                return ! $property->isStatic();
+            }
+        );
+    }
+
+    /**
+     * Retrieves instance of private property writers
+     *
+     * @param \ReflectionClass $originalClass
+     *
+     * @return PropertyAccessor[]
+     */
+    protected function getPropertyWriters(\ReflectionClass $originalClass)
+    {
+        $propertyWriters = $this->getProperties($originalClass, \ReflectionProperty::IS_PRIVATE);
+
+        foreach ($propertyWriters as &$property) {
+            $property = new PropertyAccessor($property, 'Writer');
+        }
+
+        return $propertyWriters;
     }
 }
