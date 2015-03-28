@@ -1,6 +1,6 @@
 <?php
 
-namespace Indigo\Hydra\Benchmark;
+namespace Indigo\Hydra\Benchmark\ComparedToZend;
 
 trait Hydration
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Indigo\Hydra\Benchmark\PublicProperty;
+namespace Indigo\Hydra\Benchmark\ComparedToZend\PublicProperty;
 
 use Athletic\AthleticEvent;
-use Indigo\Hydra\Benchmark\Hydration as ParentBenchmark;
+use Indigo\Hydra\Benchmark\ComparedToZend\Hydration as ParentBenchmark;
 use Indigo\Hydra\Hydrator\PublicProperty;
 use Zend\Stdlib\Hydrator\ObjectProperty as ZendObjectProperty;
 
