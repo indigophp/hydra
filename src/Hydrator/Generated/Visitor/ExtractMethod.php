@@ -60,11 +60,13 @@ class ExtractMethod extends HydratorMethods
      */
     protected function initialBody()
     {
+        $body = '';
+
         if (!empty($this->propertyWriters)) {
-            return "\$data = (array) \$object;\n\n";
+            $body = "\$data = (array) \$object;\n\n";
         }
 
-        return '';
+        return $body;
     }
 
     /**
