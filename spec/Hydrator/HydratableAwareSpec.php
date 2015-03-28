@@ -16,7 +16,6 @@ class HydratableAwareSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('Indigo\Hydra\Hydrator\HydratableAware');
-        $this->shouldHaveType('Indigo\Hydra\Hydrator\Decorator');
         $this->shouldImplement('Indigo\Hydra\Hydrator');
     }
 

@@ -12,14 +12,31 @@
 namespace Indigo\Hydra\Hydrator;
 
 use Indigo\Hydra\Hydratable;
+use Indigo\Hydra\Hydrator;
 
 /**
  * Firstly check if the object is Hydratable then fall back
  *
+ * Further object check can be done by the delegated hydrator,
+ * thus extending Base is not needed
+ *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class HydratableAware extends Decorator
+class HydratableAware implements Hydrator
 {
+    /**
+     * @var Hydrator
+     */
+    protected $hydrator;
+
+    /**
+     * @param Hydrator $hydrator
+     */
+    public function __construct(Hydrator $hydrator)
+    {
+        $this->hydrator = $hydrator;
+    }
+
     /**
      * {@inheritdoc}
      */
