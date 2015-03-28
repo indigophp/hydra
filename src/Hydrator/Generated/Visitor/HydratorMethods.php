@@ -65,7 +65,7 @@ abstract class HydratorMethods extends NodeVisitorAbstract
             return null;
         }
 
-        $method = $this->findOrCreateMethod($node, $this->getName);
+        $method = $this->findOrCreateMethod($node, $this->getMethodName());
 
         $this->replaceMethod($method);
 
