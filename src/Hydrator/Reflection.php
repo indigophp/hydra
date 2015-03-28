@@ -69,7 +69,7 @@ class Reflection extends Base
 
         if (!isset(self::$reflectionProperties[$class])) {
             $reflection = new \ReflectionClass($object);
-            $properties = [];
+            self::$reflectionProperties[$class] = [];
 
             foreach ($reflection->getProperties() as $property) {
                 // We only need object context properties???
@@ -77,11 +77,9 @@ class Reflection extends Base
                     // Is it always necessary?
                     $property->setAccessible(true);
 
-                    $properties[$property->getName()] = $property;
+                    self::$reflectionProperties[$class][$property->getName()] = $property;
                 }
             }
-
-            self::$reflectionProperties[$class] = $properties;
         }
 
         return self::$reflectionProperties[$class];
