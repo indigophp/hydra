@@ -118,15 +118,40 @@ PART;
             new Param('data', null, 'array'),
         ];
 
+        $body = $this->buildHydrateAccessibleProperties();
+        $body .= $this->buildHydratePropertyWriters();
+
+        $method->stmts = $this->parser->parse('<?php ' . $body);
+    }
+
+    /**
+     * Builds hydrate accessible properties
+     *
+     * @return string
+     */
+    protected function buildHydrateAccessibleProperties()
+    {
         $body = '';
 
         foreach ($this->accessibleProperties as $accessibleProperty) {
             $body .= sprintf(
-                '$object->%s  = $data[%s];',
+                '$object->%s = $data[%s];',
                 $accessibleProperty->getName(),
                 var_export($accessibleProperty->getName(), true)
             )."\n";
         }
+
+        return $body;
+    }
+
+    /**
+     * Builds hydrate property writers
+     *
+     * @return string
+     */
+    protected function buildHydratePropertyWriters()
+    {
+        $body = '';
 
         foreach ($this->propertyWriters as $propertyWriter) {
             $body .= sprintf(
@@ -136,8 +161,9 @@ PART;
             )."\n";
         }
 
-        $method->stmts = $this->parser->parse('<?php ' . $body);
+        return $body;
     }
+
     /**
      * @param ClassMethod $method
      */
@@ -152,7 +178,6 @@ PART;
             return;
         }
 
-        $body = 'return get_object_vars($this);';
         $body = '';
 
         if (!empty($this->propertyWriters)) {
@@ -160,34 +185,73 @@ PART;
         }
 
         $body .= 'return [';
+        $body .= $this->buildExtractAccessibleProperties();
+        $body .= $this->buildExtractPropertyWriters();
+        $body .= "\n];";
 
-        foreach ($this->accessibleProperties as $accessibleProperty) {
-            $propertyName = $accessibleProperty->getName();
-            $exportedPropertyName = var_export($propertyName, true);
-            $body .= "\n    ";
+        $method->stmts = $this->parser->parse('<?php ' . $body);
+    }
 
-            if (empty($this->propertyWriters) || ! $accessibleProperty->isProtected()) {
-                $body .= sprintf('%s => $object->%s,', $exportedPropertyName, $propertyName);
-            } else {
-                $body .= sprintf('%s => $data["\\0*\\0%s"],', $exportedPropertyName, $propertyName);
-            }
-        }
+    /**
+     * Builds an extract property
+     *
+     * @param string $template
+     * @param array  $arguments
+     *
+     * @return string
+     */
+    protected function buildExtractProperty($template, array $arguments)
+    {
+        return "\n    ".vsprintf($template, $arguments);
+    }
+
+    /**
+     * Builds extract accessible properties
+     *
+     * @return string
+     */
+    protected function buildExtractAccessibleProperties()
+    {
+        $body = '';
 
         foreach ($this->propertyWriters as $propertyWriter) {
             $property = $propertyWriter->getOriginalProperty();
             $propertyName = $property->getName();
 
-            $body .= "\n    ";
-            $body .= sprintf(
-                '%s => $data["\\0%s\\0%s"]',
-                var_export($propertyName, true),
-                $property->getDeclaringClass()->getName(),
-                $propertyName
+            $body .= $this->buildExtractProperty(
+                '%s => $data["\\0%s\\0%s"],',
+                [
+                    var_export($propertyName, true),
+                    $property->getDeclaringClass()->getName(),
+                    $propertyName,
+                ]
             );
         }
 
-        $body .= "\n];";
-        $method->stmts = $this->parser->parse('<?php ' . $body);
+        return $body;
+    }
+
+    /**
+     * Builds extract property writers
+     *
+     * @return string
+     */
+    protected function buildExtractPropertyWriters()
+    {
+        $body = '';
+
+        foreach ($this->accessibleProperties as $accessibleProperty) {
+            $propertyName = $accessibleProperty->getName();
+            $exportedPropertyName = var_export($propertyName, true);
+
+            if (empty($this->propertyWriters) || ! $accessibleProperty->isProtected()) {
+                $body .= $this->buildExtractProperty('%s => $object->%s,', [$exportedPropertyName, $propertyName]);
+            } else {
+                $body .= $this->buildExtractProperty('%s => $data["\\0*\\0%s"],', [$exportedPropertyName, $propertyName]);
+            }
+        }
+
+        return $body;
     }
 
     /**
