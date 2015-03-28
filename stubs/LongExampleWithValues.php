@@ -16,13 +16,8 @@ namespace Indigo\Hydra\Stub;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class LongExampleWithValues
+class LongExampleWithValues extends ShortExampleWithValues
 {
-    private $a = 'a';
-    protected $b = null;
-    public $c = 1;
-    static $d = true;
-
     public $e = -1;
     public $f = 'F';
     public $g = 1.0;

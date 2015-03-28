@@ -16,13 +16,8 @@ namespace Indigo\Hydra\Stub;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class LongExample
+class LongExample extends ShortExample
 {
-    private $a;
-    protected $b;
-    public $c;
-    static $d;
-
     public $e;
     public $f;
     public $g;
