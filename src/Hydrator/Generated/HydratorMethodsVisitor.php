@@ -171,23 +171,23 @@ PART;
     {
         $method->params = [new Param('object')];
 
-        if (empty($this->accessibleProperties) && empty($this->propertyWriters)) {
-            // no properties to hydrate
-            $method->stmts = $this->parser->parse('<?php return [];');
+        // if no properties to hydrate
+        $body = 'return [];';
 
-            return;
+        if (!empty($this->accessibleProperties) || !empty($this->propertyWriters)) {
+            $body = '';
+
+            if (!empty($this->propertyWriters)) {
+                $body = "\$data = (array) \$object;\n\n";
+            }
+
+            $body .= sprintf(
+                "return [\n%s%s];",
+                $this->buildExtractAccessibleProperties(),
+                $this->buildExtractPropertyWriters()
+            );
         }
 
-        $body = '';
-
-        if (!empty($this->propertyWriters)) {
-            $body = "\$data = (array) \$object;\n\n";
-        }
-
-        $body .= 'return [';
-        $body .= $this->buildExtractAccessibleProperties();
-        $body .= $this->buildExtractPropertyWriters();
-        $body .= "\n];";
 
         $method->stmts = $this->parser->parse('<?php ' . $body);
     }
@@ -202,7 +202,7 @@ PART;
      */
     protected function buildExtractProperty($template, array $arguments)
     {
-        return "\n    ".vsprintf($template, $arguments);
+        return "    ".vsprintf($template, $arguments)."\n";
     }
 
     /**
